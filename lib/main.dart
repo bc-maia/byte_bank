@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(
-      Column(
-        verticalDirection: VerticalDirection.up,
-        children: <Widget>[
-          Text(
-            'Fast Development',
-            textDirection: TextDirection.ltr,
-            style: TextStyle(backgroundColor: Colors.red),
-          ),
-          Container(
-              color: Colors.green,
-              child: Text('Expressive and Flexible UI',
-                  textDirection: TextDirection.ltr)),
-          Container(
-              color: Colors.blue,
-              child:
-                  Text('Native Performance', textDirection: TextDirection.ltr))
-        ],
-      ), //Column
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+            backgroundColor: Colors.green[800], title: Text('Transferências')),
+        floatingActionButton:
+            FloatingActionButton(onPressed: null, child: Icon(Icons.add)),
+      ),
     );
+  }
+}
