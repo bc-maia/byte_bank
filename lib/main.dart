@@ -2,26 +2,21 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(
       Column(
-        verticalDirection: VerticalDirection.down,
+        verticalDirection: VerticalDirection.up,
         children: <Widget>[
           Text(
             'Fast Development',
             textDirection: TextDirection.ltr,
+            style: TextStyle(backgroundColor: Colors.red),
           ),
-          Text(
-            'Expressive and Flexible UI',
-            textDirection: TextDirection.ltr,
-          ),
-          Text(
-            'Native Performance',
-            textDirection: TextDirection.ltr,
-          ),
-          Column(children: <Widget>[
-            Text(
-              'Install Flutter today.',
-              textDirection: TextDirection.ltr,
-            ),
-          ])
+          Container(
+              color: Colors.green,
+              child: Text('Expressive and Flexible UI',
+                  textDirection: TextDirection.ltr)),
+          Container(
+              color: Colors.blue,
+              child:
+                  Text('Native Performance', textDirection: TextDirection.ltr))
         ],
       ), //Column
     );
