@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
           appBar:
               AppBar(backgroundColor: _green, title: Text('Transferências')),
           floatingActionButton: FloatingActionButton(
-              onPressed: () => print('click cria nova transfer'),
+              onPressed: () => print('click - add new transfer entry'),
               backgroundColor: _green,
               child: Icon(Icons.add)),
           body: TransferList()),
