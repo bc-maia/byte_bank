@@ -15,7 +15,12 @@ class BankApp extends StatelessWidget {
   }
 }
 
-class TransferForm extends StatelessWidget {
+class TransferForm extends StatefulWidget {
+  @override
+  createState() => _TransferFormState();
+}
+
+class _TransferFormState extends State<TransferForm> {
   final TextEditingController _controlAccount = TextEditingController();
   final TextEditingController _controlAmount = TextEditingController();
   final TextEditingController _controlDescript = TextEditingController();
@@ -26,37 +31,39 @@ class TransferForm extends StatelessWidget {
       // key: globalKey,
       appBar:
           AppBar(backgroundColor: _greenTheme, title: Text('Transfer Form')),
-      body: ListView(
-        children: <Widget>[
-          InputField(
-              controller: _controlAccount,
-              label: 'Account Number',
-              hint: '000000',
-              icon: Icons.person,
-              type: TextInputType.number),
-          InputField(
-              controller: _controlAmount,
-              label: 'Amount',
-              hint: 'R\$100.00',
-              icon: Icons.monetization_on,
-              type: TextInputType.number),
-          InputField(
-            controller: _controlDescript,
-            label: 'Description',
-            hint: 'Mortgage/Rent',
-            icon: Icons.info,
-          ),
-          Center(
-            heightFactor: 2,
-            child: RaisedButton(
-              child: Text('Submit'),
-              color: _greenTheme,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-              onPressed: () => _createNewTransfer(context),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            InputField(
+                controller: _controlAccount,
+                label: 'Account Number',
+                hint: '000000',
+                icon: Icons.person,
+                type: TextInputType.number),
+            InputField(
+                controller: _controlAmount,
+                label: 'Amount',
+                hint: 'R\$100.00',
+                icon: Icons.monetization_on,
+                type: TextInputType.number),
+            InputField(
+              controller: _controlDescript,
+              label: 'Description',
+              hint: 'Mortgage/Rent',
+              icon: Icons.info,
             ),
-          ),
-        ],
+            Center(
+              heightFactor: 2,
+              child: RaisedButton(
+                child: Text('Submit'),
+                color: _greenTheme,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                onPressed: () => _createNewTransfer(context),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -132,7 +139,8 @@ class _TransferListState extends State<TransferList> {
                 ));
             future.then((newTransfer) {
               debugPrint('returned value is: ${newTransfer.toString()}');
-              widget._transfers.add(newTransfer);
+              if (newTransfer != null) widget._transfers.add(newTransfer);
+              debugPrint(widget._transfers.toString());
             });
           },
           backgroundColor: _greenTheme,
