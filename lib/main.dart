@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 void main() => runApp(BankApp());
 
@@ -9,7 +10,7 @@ class BankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
-      home: TransferForm(),
+      home: TransferList(),
     );
   }
 }
@@ -18,8 +19,6 @@ class TransferForm extends StatelessWidget {
   final TextEditingController _controlAccount = TextEditingController();
   final TextEditingController _controlAmount = TextEditingController();
   final TextEditingController _controlDescript = TextEditingController();
-
-  // final globalKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -54,36 +53,40 @@ class TransferForm extends StatelessWidget {
               color: _greenTheme,
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-              onPressed: () {
-                final int account = int.tryParse(_controlAccount.text);
-                final double amount = double.tryParse(_controlAmount.text);
-                final String description = _controlDescript.text;
-
-                if (account != null && amount != null && description != null) {
-                  final transfer = Transfer(account, amount, description);
-                  // For debugging :
-                  // globalKey.currentState.showSnackBar(
-                  //     SnackBar(content: Text(transfer.toString())));
-                }
-              },
+              onPressed: () => _createNewTransfer(context),
             ),
-          )
+          ),
         ],
       ),
     );
+  }
+
+  void _createNewTransfer(BuildContext context) {
+    final int account = int.tryParse(_controlAccount.text);
+    final double amount = double.tryParse(_controlAmount.text);
+    final String description = _controlDescript.text;
+
+    if (account != null && amount != null && description != null) {
+      final newTransfer = Transfer(account, amount, description);
+      Navigator.pop(context, newTransfer);
+    }
   }
 }
 
 class InputField extends StatelessWidget {
   final String label;
   final String hint;
+  final TextEditingController controller;
   final IconData icon;
   final TextInputType type;
-  final TextEditingController controller;
 
   const InputField(
-      {Key key, this.label, this.hint, this.icon, this.type, this.controller})
-      : super(key: key);
+      {Key key,
+      this.label,
+      this.hint,
+      this.icon,
+      this.type = TextInputType.text,
+      this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +96,7 @@ class InputField extends StatelessWidget {
         controller: controller ?? null,
         decoration: InputDecoration(
             labelText: label, icon: Icon(icon) ?? null, hintText: hint),
-        keyboardType: type ?? TextInputType.text,
+        keyboardType: type,
         style: TextStyle(fontSize: 16.0),
       ),
     );
@@ -106,20 +109,25 @@ class TransferList extends StatefulWidget {
 }
 
 class _TransferListState extends State<TransferList> {
+  List<TransferItem> _transferItems = List<TransferItem>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:
           AppBar(backgroundColor: _greenTheme, title: Text('Transferências')),
-      body: ListView(
-        children: <Widget>[
-          TransferItem(Transfer(123000, 90.0, 'Transfer Description A')),
-          TransferItem(Transfer(282930, 200.20, 'Transfer Description B')),
-          TransferItem(Transfer(153384, 321.65, 'Transfer Description 3'))
-        ],
-      ),
+      body: ListView(children: _transferItems),
       floatingActionButton: FloatingActionButton(
-          onPressed: () => print('click - add new transfer entry'),
+          onPressed: () {
+            final Future<Transfer> future = Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TransferForm(),
+                ));
+            future.then((newTransfer) {
+              print(newTransfer.toString());
+            });
+          },
           backgroundColor: _greenTheme,
           child: Icon(Icons.add)),
     );
