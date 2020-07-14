@@ -126,7 +126,6 @@ class _TransferListState extends State<TransferList> {
         itemCount: widget._transfers.length,
         itemBuilder: (context, index) {
           final _transfer = widget._transfers[index];
-          debugPrint("new Item builder");
           return TransferItem(_transfer);
         },
       ),
@@ -138,9 +137,10 @@ class _TransferListState extends State<TransferList> {
                   builder: (context) => TransferForm(),
                 ));
             future.then((newTransfer) {
-              debugPrint('returned value is: ${newTransfer.toString()}');
-              if (newTransfer != null) widget._transfers.add(newTransfer);
-              debugPrint(widget._transfers.toString());
+              Future.delayed(Duration(seconds: 1), () {
+                if (newTransfer != null)
+                  setState(() => widget._transfers.add(newTransfer));
+              });
             });
           },
           backgroundColor: _greenTheme,
