@@ -104,19 +104,25 @@ class InputField extends StatelessWidget {
 }
 
 class TransferList extends StatefulWidget {
+  final List<Transfer> _transfers = List();
+
   @override
   createState() => _TransferListState();
 }
 
 class _TransferListState extends State<TransferList> {
-  List<TransferItem> _transferItems = List<TransferItem>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          AppBar(backgroundColor: _greenTheme, title: Text('Transferências')),
-      body: ListView(children: _transferItems),
+      appBar: AppBar(title: Text('Transfers'), backgroundColor: _greenTheme),
+      body: ListView.builder(
+        itemCount: widget._transfers.length,
+        itemBuilder: (context, index) {
+          final _transfer = widget._transfers[index];
+          debugPrint("new Item builder");
+          return TransferItem(_transfer);
+        },
+      ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             final Future<Transfer> future = Navigator.push(
@@ -125,7 +131,8 @@ class _TransferListState extends State<TransferList> {
                   builder: (context) => TransferForm(),
                 ));
             future.then((newTransfer) {
-              print(newTransfer.toString());
+              debugPrint('returned value is: ${newTransfer.toString()}');
+              widget._transfers.add(newTransfer);
             });
           },
           backgroundColor: _greenTheme,
