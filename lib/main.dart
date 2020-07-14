@@ -3,14 +3,18 @@ import 'package:meta/meta.dart';
 
 void main() => runApp(BankApp());
 
-Color _greenTheme = Colors.green[800];
-
 class BankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
       home: TransferList(),
+      theme: ThemeData(
+          primaryColor: Colors.green[800],
+          accentColor: Colors.green[400],
+          buttonTheme: ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+              buttonColor: Colors.green[800])),
     );
   }
 }
@@ -29,8 +33,7 @@ class _TransferFormState extends State<TransferForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       // key: globalKey,
-      appBar:
-          AppBar(backgroundColor: _greenTheme, title: Text('Transfer Form')),
+      appBar: AppBar(title: Text('Transfer Form')),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -56,7 +59,6 @@ class _TransferFormState extends State<TransferForm> {
               heightFactor: 2,
               child: RaisedButton(
                 child: Text('Submit'),
-                color: _greenTheme,
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 onPressed: () => _createNewTransfer(context),
@@ -121,7 +123,7 @@ class _TransferListState extends State<TransferList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Transfers'), backgroundColor: _greenTheme),
+      appBar: AppBar(title: Text('Transfers')),
       body: ListView.builder(
         itemCount: widget._transfers.length,
         itemBuilder: (context, index) {
@@ -131,11 +133,9 @@ class _TransferListState extends State<TransferList> {
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            final Future<Transfer> future = Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TransferForm(),
-                ));
+            final Future<Transfer> future = Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TransferForm()));
+
             future.then((newTransfer) {
               Future.delayed(Duration(seconds: 1), () {
                 if (newTransfer != null)
@@ -143,7 +143,6 @@ class _TransferListState extends State<TransferList> {
               });
             });
           },
-          backgroundColor: _greenTheme,
           child: Icon(Icons.add)),
     );
   }
